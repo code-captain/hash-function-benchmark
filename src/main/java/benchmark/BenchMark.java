@@ -2,6 +2,8 @@ package benchmark;
 
 import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
+import com.hashfunctions.CRC16_Princeton;
+import com.hashfunctions.CRC16_Redis;
 import com.hashfunctions.Crc16;
 import com.hashfunctions.FNV1a;
 import org.apache.commons.codec.binary.StringUtils;
@@ -18,7 +20,7 @@ import java.util.Random;
 @State(Scope.Thread)
 @Fork(1)
 @Warmup(iterations = 5, time = 1)
-@Measurement(iterations = 10, time = 2)
+@Measurement(iterations = 5, time = 2)
 @BenchmarkMode(Mode.Throughput)
 public class BenchMark {
     private static final Random RND = new SecureRandom();
@@ -31,7 +33,7 @@ public class BenchMark {
         public byte[] testArray;
         public String testString;
 
-        @Setup(Level.Iteration)
+        @Setup(Level.Invocation)
         public void setup() {
             testArray = new byte[length];
             RND.nextBytes(testArray);
@@ -107,14 +109,20 @@ public class BenchMark {
     }
 
     @Benchmark
-    public void benchCrc16_custom_implementation(ExecutionPlan plan) {
-        String testString = plan.testString;
-        Crc16.hash(testString);
-    }
-
-    @Benchmark
     public void benchFNV1a_custom_implementation(ExecutionPlan plan) {
         String testString = plan.testString;
         FNV1a.hash32(testString);
+    }
+
+    @Benchmark
+    public void benchCrc16_Redis_implementation(ExecutionPlan plan) {
+        String testString = plan.testString;
+        CRC16_Redis.hash(testString);
+    }
+
+    @Benchmark
+    public void benchCrc16_Princeton_implementation(ExecutionPlan plan) {
+        String testString = plan.testString;
+        CRC16_Princeton.hash(testString);
     }
 }
