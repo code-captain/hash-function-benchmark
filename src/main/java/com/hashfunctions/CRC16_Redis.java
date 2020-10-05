@@ -37,7 +37,7 @@ public class CRC16_Redis {
             0x6e17,0x7e36,0x4e55,0x5e74,0x2e93,0x3eb2,0x0ed1,0x1ef0
     };
 
-    public static long hash(String data) {
+    public static int hash(String data) {
         int crc = 0x0000;
         for (int i = 0; i < data.length(); i++) {
             crc = (crc >>> 8) ^ table[(crc ^ data.charAt(i)) & 0xff];

@@ -1,21 +1,18 @@
 import com.hashfunctions.*;
 import com.hashfunctions.murmur.Murmur2;
 import com.hashfunctions.murmur.Murmur3;
-import org.apache.commons.math3.distribution.ChiSquaredDistribution;
-import org.apache.commons.math3.special.Gamma;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import utils.ChiSquareTestUtils;
+import utils.UniformDistributionTestUtils;
 
 import java.io.*;
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
-import static java.util.Arrays.stream;
+import static utils.UniformDistributionTestUtils.convertToDistributionIntervals;
 
 public class HashFunctionsForEnglishWordsChiSquareTest {
 
@@ -44,84 +41,95 @@ public class HashFunctionsForEnglishWordsChiSquareTest {
     @ParameterizedTest
     @ValueSource(ints = { 16384, 8192, 4096, 2048, 1024 })
     public void djb2(int size) {
-        Collection<Long> values = getValuesFrequencies(size, (Djb2::hash));
-        Assertions.assertTrue(isChiSquaredUniform(values));
+        Collection<Integer> values = getValues(size, (Djb2::hash));
+
+        UniformDistributionTestUtils.DistributionIntervalsStatistic statistic = convertToDistributionIntervals(values);
+        System.out.println(statistic);
+        Assertions.assertTrue(ChiSquareTestUtils.isChiSquaredUniform(statistic));
     }
 
     @ParameterizedTest
     @ValueSource(ints = { 16384, 8192, 4096, 2048, 1024 })
     public void sdbm(int size) {
-        Collection<Long> values = getValuesFrequencies(size, (Sdbm::hash));
-        Assertions.assertTrue(isChiSquaredUniform(values));
+        Collection<Integer> values = getValues(size, (Sdbm::hash));
+
+        UniformDistributionTestUtils.DistributionIntervalsStatistic statistic = convertToDistributionIntervals(values);
+        System.out.println(statistic);
+        Assertions.assertTrue(ChiSquareTestUtils.isChiSquaredUniform(statistic));
     }
 
     @ParameterizedTest
     @ValueSource(ints = { 16384, 8192, 4096, 2048, 1024 })
     public void loseLose(int size) {
-        Collection<Long> values = getValuesFrequencies(size, (LoseLose::hash));
-        Assertions.assertTrue(isChiSquaredUniform(values));
+        Collection<Integer> values = getValues(size, (LoseLose::hash));
 
+        UniformDistributionTestUtils.DistributionIntervalsStatistic statistic = convertToDistributionIntervals(values);
+        System.out.println(statistic);
+        Assertions.assertTrue(ChiSquareTestUtils.isChiSquaredUniform(statistic));
     }
 
     @ParameterizedTest
     @ValueSource(ints = { 16384, 8192, 4096, 2048, 1024 })
     public void fnv1(int size) {
-        Collection<Long> values = getValuesFrequencies(size, (FNV1::hash32));
-        Assertions.assertTrue(isChiSquaredUniform(values));
+        Collection<Integer> values = getValues(size, (FNV1::hash32));
+
+        UniformDistributionTestUtils.DistributionIntervalsStatistic statistic = convertToDistributionIntervals(values);
+        System.out.println(statistic);
+        Assertions.assertTrue(ChiSquareTestUtils.isChiSquaredUniform(statistic));
     }
 
     @ParameterizedTest
     @ValueSource(ints = { 16384, 8192, 4096, 2048, 1024 })
     public void fnv1a(int size) {
-        Collection<Long> values = getValuesFrequencies(size, (FNV1::hash32a));
-        System.out.println(values);
-        Assertions.assertTrue(isChiSquaredUniform(values));
+        Collection<Integer> values = getValues(size, (FNV1::hash32a));
+
+        UniformDistributionTestUtils.DistributionIntervalsStatistic statistic = convertToDistributionIntervals(values);
+        System.out.println(statistic);
+        Assertions.assertTrue(ChiSquareTestUtils.isChiSquaredUniform(statistic));
     }
 
     @ParameterizedTest
     @ValueSource(ints = { 16384, 8192, 4096, 2048, 1024 })
     public void crc16(int size) {
-        Collection<Long> values = getValuesFrequencies(size, (CRC16_Redis::hash));
-        System.out.println(values);
-        Assertions.assertTrue(isChiSquaredUniform(values));
+        Collection<Integer> values = getValues(size, (CRC16_Redis::hash));
+
+        UniformDistributionTestUtils.DistributionIntervalsStatistic statistic = convertToDistributionIntervals(values);
+        System.out.println(statistic);
+        Assertions.assertTrue(ChiSquareTestUtils.isChiSquaredUniform(statistic));
     }
 
     @ParameterizedTest
     @ValueSource(ints = { 16384, 8192, 4096, 2048, 1024 })
     public void murmur2(int size) {
-        Collection<Long> values = getValuesFrequencies(size, str ->
-                Murmur2.hash_32(str, new Random().nextLong())
+        Collection<Integer> values = getValues(size, str ->
+                Murmur2.hash_32(str, new Random().nextInt())
         );
-        System.out.println(values);
-        Assertions.assertTrue(isChiSquaredUniform(values));
+
+        UniformDistributionTestUtils.DistributionIntervalsStatistic statistic = convertToDistributionIntervals(values);
+        System.out.println(statistic);
+        Assertions.assertTrue(ChiSquareTestUtils.isChiSquaredUniform(statistic));
     }
 
     @ParameterizedTest
     @ValueSource(ints = { 16384, 8192, 4096, 2048, 1024 })
     public void murmur3(int size) {
-        Collection<Long> values = getValuesFrequencies(size, str ->
-                Murmur3.hash_32(str, new Random().nextLong())
+        Collection<Integer> values = getValues(size, str ->
+                Murmur3.hash_32(str, new Random().nextInt())
         );
-        double v = calculateBhattacharyyaCoefficientByUniformDistribution(values);
-        System.out.println(v);
-        Assertions.assertTrue(isChiSquaredUniform(values));
+
+        UniformDistributionTestUtils.DistributionIntervalsStatistic statistic = convertToDistributionIntervals(values);
+        System.out.println(statistic);
+        Assertions.assertTrue(ChiSquareTestUtils.isChiSquaredUniform(statistic));
     }
 
-    private <T extends Number> Collection<Long> getValuesFrequencies(int count, Function<String, T> hashFunction) {
-        List<Long> values = new ArrayList<>();
+    private Collection<Integer> getValues(int count, Function<String, Integer> hashFunction) {
+        Collection<Integer> values = new ArrayList<>();
         for (int i = 0; i <= count; i++) {
             String randomString = getRandomString();
-            long hashCode = hashFunction.apply(randomString).longValue() % count;
+            int hashCode = hashFunction.apply(randomString);
             values.add(hashCode);
         }
-        HashMap<Long, Long> frequenciesMap = values.stream()
-                .collect(Collectors.groupingBy(
-                        Function.identity(),
-                        HashMap::new,
-                        Collectors.counting()
-                ));
-
-        return frequenciesMap.values();
+        return values;
     }
 
     private static String getRandomString() {
@@ -137,46 +145,5 @@ public class HashFunctionsForEnglishWordsChiSquareTest {
 
     private static int getRandom(int bound) {
         return new Random().nextInt(bound);
-    }
-
-    private static <T extends Number> boolean isChiSquaredUniform(Collection<Long> frequencies) {
-        return chiSquaredObserved(frequencies) < chiSquaredExpected(frequencies.size(), 0.95);
-    }
-
-    private static <T extends Number> double chiSquaredObserved(Collection<Long> frequencies) {
-        double avg = frequencies.stream().mapToDouble(Number::doubleValue).sum() / frequencies.size();
-        double sqs = frequencies.stream().mapToDouble(Number::doubleValue).reduce(0, (a, b) -> a + pow((b - avg), 2));
-        return sqs / avg;
-    }
-
-    private static double chiSquaredExpected(double dof, double significance) {
-        ChiSquaredDistribution x2 = new ChiSquaredDistribution(dof);
-        return x2.inverseCumulativeProbability(significance);
-    }
-
-    static double x2Dist(double[] data) {
-        double avg = stream(data).sum() / data.length;
-        double sqs = stream(data).reduce(0, (a, b) -> a + pow((b - avg), 2));
-        return sqs / avg;
-    }
-
-    static double x2Prob(double dof, double distance) {
-        return Gamma.regularizedGammaQ(dof / 2, distance / 2);
-    }
-
-    static boolean x2IsUniform(double[] data, double significance) {
-        return x2Prob(data.length - 1.0, x2Dist(data)) > significance;
-    }
-
-    static double calculateBhattacharyyaCoefficientByUniformDistribution(Collection<Long> frequencies) {
-        double avg = frequencies.stream().mapToDouble(Number::doubleValue).sum() / frequencies.size();
-        double sum = 0;
-        for (Long freqeunty : frequencies) {
-            sum += sqrt (freqeunty * avg);
-        }
-        double sqs = frequencies.stream().mapToDouble(Number::doubleValue).reduce(0, (a, b) -> a + sqrt(b * avg));
-        double huiv = Math.log1p(sum);
-        System.out.println(huiv);
-        return sqs;
     }
 }

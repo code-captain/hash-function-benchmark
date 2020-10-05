@@ -24,21 +24,21 @@ public class HashFunctionsForRandomWordsChiSquareTest {
     @ParameterizedTest
     @ValueSource(ints = { 16384, 8192, 4096, 2048, 1024 })
     public void djb2(int size) {
-        List<Long> values = getRandomValues(size, (Djb2::hash));
+        List<Integer> values = getRandomValues(size, (Djb2::hash));
         Assertions.assertTrue(isChiSquaredUniform(values));
     }
 
     @ParameterizedTest
     @ValueSource(ints = { 16384, 8192, 4096, 2048, 1024 })
     public void sdbm(int size) {
-        List<Long> values = getRandomValues(size, (Sdbm::hash));
+        List<Integer> values = getRandomValues(size, (Sdbm::hash));
         Assertions.assertTrue(isChiSquaredUniform(values));
     }
 
     @ParameterizedTest
     @ValueSource(ints = { 16384, 8192, 4096, 2048, 1024 })
     public void loseLose(int size) {
-        List<Long> values = getRandomValues(size, (LoseLose::hash));
+        List<Integer> values = getRandomValues(size, (LoseLose::hash));
         Assertions.assertTrue(isChiSquaredUniform(values));
     }
 
@@ -59,8 +59,8 @@ public class HashFunctionsForRandomWordsChiSquareTest {
     @ParameterizedTest
     @ValueSource(ints = { 16384, 8192, 4096, 2048, 1024 })
     public void crc16(int size) {
-        List<Long> values = getRandomValues(size, (CRC16_Redis::hash));
-        System.out.println("Is internet test" + x2IsUniform(values.stream().mapToDouble(Long::doubleValue).toArray(), 0.05));
+        List<Integer> values = getRandomValues(size, (CRC16_Redis::hash));
+        System.out.println("Is internet test" + x2IsUniform(values.stream().mapToDouble(Integer::doubleValue).toArray(), 0.05));
 
         Assertions.assertTrue(isChiSquaredUniform(values));
     }
@@ -68,10 +68,10 @@ public class HashFunctionsForRandomWordsChiSquareTest {
     @ParameterizedTest
     @ValueSource(ints = { 16384, 8192, 4096, 2048, 1024 })
     public void murmur2(int size) {
-        List<Long> values = getRandomValues(size, str ->
-                Murmur2.hash_32(str, new Random().nextLong())
+        List<Integer> values = getRandomValues(size, str ->
+                Murmur2.hash_32(str, new Random().nextInt())
         );
-        System.out.println("Is internet test" + x2IsUniform(values.stream().mapToDouble(Long::doubleValue).toArray(), 0.05));
+        System.out.println("Is internet test" + x2IsUniform(values.stream().mapToDouble(Integer::doubleValue).toArray(), 0.05));
 
         Assertions.assertTrue(isChiSquaredUniform(values));
     }
@@ -79,11 +79,11 @@ public class HashFunctionsForRandomWordsChiSquareTest {
     @ParameterizedTest
     @ValueSource(ints = { 16384, 8192, 4096, 2048, 1024 })
     public void murmur3(int size) {
-        List<Long> values = getRandomValues(size, str ->
-                Murmur3.hash_32(str, new Random().nextLong())
+        List<Integer> values = getRandomValues(size, str ->
+                Murmur3.hash_32(str, new Random().nextInt())
         );
         System.out.println("Is my test" + isChiSquaredUniform(values));
-        System.out.println("Is internet test" + x2IsUniform(values.stream().mapToDouble(Long::doubleValue).toArray(), 0.05));
+        System.out.println("Is internet test" + x2IsUniform(values.stream().mapToDouble(Integer::doubleValue).toArray(), 0.05));
         Assertions.assertTrue(isChiSquaredUniform(values));
     }
 

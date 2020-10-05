@@ -13,30 +13,17 @@ public class Murmur3 extends MurmurConstants {
 
     private static long X64_128_C2 = 0x4cf5ad432745937fL;
 
-    /**
-     * Compute the Murmur3 hash as described in the original source code.
-     *
-     * @param data
-     *            the data that needs to be hashed
-     *
-     * @param length
-     *            the length of the data that needs to be hashed
-     *
-     * @param seed
-     *            the seed to use to compute the hash
-     *
-     * @return the computed hash value
-     */
-    public static long hash_32(final byte[] data, int length, long seed) {
+
+    public static int hash_32(final byte[] data, int length, int seed) {
         final int nblocks = length >> 2;
-        long hash = seed;
+        int hash = seed;
 
         //----------
         // body
         for(int i = 0; i < nblocks; i++) {
             final int i4 = i << 2;
 
-            long k1 = (data[i4] & UNSIGNED_MASK);
+            int k1 = (data[i4] & UNSIGNED_MASK);
             k1 |= (data[i4 + 1] & UNSIGNED_MASK) << 8;
             k1 |= (data[i4 + 2] & UNSIGNED_MASK) << 16;
             k1 |= (data[i4 + 3] & UNSIGNED_MASK) << 24;
@@ -49,7 +36,7 @@ public class Murmur3 extends MurmurConstants {
 
             hash ^= k1;
             hash = rotl32(hash,13);
-            hash = (((hash * 5) & UINT_MASK) + 0xe6546b64l) & UINT_MASK;
+            hash = (((hash * 5) & UINT_MASK) + 0xe6546b64) & UINT_MASK;
         }
 
         //----------
@@ -57,7 +44,7 @@ public class Murmur3 extends MurmurConstants {
 
         // Advance offset to the unprocessed tail of the data.
         int offset = (nblocks << 2); // nblocks * 2;
-        long k1 = 0;
+        int k1 = 0;
 
         switch (length & 3) {
             case 3:
@@ -83,17 +70,17 @@ public class Murmur3 extends MurmurConstants {
         return hash;
     }
 
-    public static long hash_32(String data, long seed) {
+    public static int hash_32(String data, int seed) {
         int length = data.length();
         final int nblocks = length >> 2;
-        long hash = seed;
+        int hash = seed;
 
         //----------
         // body
         for(int i = 0; i < nblocks; i++) {
             final int i4 = i << 2;
 
-            long k1 = (data.charAt(i4) & UNSIGNED_MASK);
+            int k1 = (data.charAt(i4) & UNSIGNED_MASK);
             k1 |= (data.charAt(i4 + 1) & UNSIGNED_MASK) << 8;
             k1 |= (data.charAt(i4 + 2) & UNSIGNED_MASK) << 16;
             k1 |= (data.charAt(i4 + 3) & UNSIGNED_MASK) << 24;
@@ -106,7 +93,7 @@ public class Murmur3 extends MurmurConstants {
 
             hash ^= k1;
             hash = rotl32(hash,13);
-            hash = (((hash * 5) & UINT_MASK) + 0xe6546b64l) & UINT_MASK;
+            hash = (((hash * 5) & UINT_MASK) + 0xe6546b64) & UINT_MASK;
         }
 
         //----------
@@ -114,7 +101,7 @@ public class Murmur3 extends MurmurConstants {
 
         // Advance offset to the unprocessed tail of the data.
         int offset = (nblocks << 2); // nblocks * 2;
-        long k1 = 0;
+        int k1 = 0;
 
         switch (length & 3) {
             case 3:
@@ -287,28 +274,19 @@ public class Murmur3 extends MurmurConstants {
      *
      * @param original
      * @param shift
-     * @return
      */
-    private static long rotl32(long original, int shift) {
+    private static int rotl32(int original, int shift) {
         return ((original << shift) & UINT_MASK) | ((original >>> (32 - shift)) & UINT_MASK);
     }
 
-    /**
-     * Rotate left for 64 bits.
-     *
-     * @param original
-     * @param shift
-     * @return
-     */
+
     /**
      * fmix function for 32 bits.
      *
-     * @param h
-     * @return
      */
-    private static long fmix32(long h) {
+    private static int fmix32(int h) {
         h ^= (h >> 16) & UINT_MASK;
-        h = (h * 0x85ebca6bl) & UINT_MASK;
+        h = (h * 0x85ebca6b) & UINT_MASK;
         h ^= (h >> 13) & UINT_MASK;
         h = (h * 0xc2b2ae35) & UINT_MASK;
         h ^= (h >> 16) & UINT_MASK;
@@ -319,8 +297,6 @@ public class Murmur3 extends MurmurConstants {
     /**
      * fmix function for 64 bits.
      *
-     * @param k
-     * @return
      */
     private static long fmix64(long k) {
         k ^= k >>> 33;
@@ -331,5 +307,4 @@ public class Murmur3 extends MurmurConstants {
 
         return k;
     }
-
 }

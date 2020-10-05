@@ -75,12 +75,12 @@ public class HashFunctionsForRandomWordsBenchmark {
     @Benchmark
     public void murmur2(ExecutionPlan plan, Blackhole blackhole) {
         String testString = plan.testString;
-        blackhole.consume(Murmur2.hash_32(testString, new Random().nextLong()));
+        blackhole.consume(Murmur2.hash_32(testString, new Random().nextInt()));
     }
 
     @Benchmark
     public void murmur3(ExecutionPlan plan, Blackhole blackhole) {
         String testString = plan.testString;
-        blackhole.consume(Murmur3.hash_32(testString, new Random().nextLong()));
+        blackhole.consume(Murmur3.hash_32(testString, new Random().nextInt()));
     }
 }
