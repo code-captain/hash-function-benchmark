@@ -1,12 +1,6 @@
 package com.hashfunctions;
 
 
-import org.apache.commons.codec.binary.StringUtils;
-
-import java.nio.charset.Charset;
-import java.security.SecureRandom;
-import java.util.Random;
-
 public class CRC16_Redis {
     private static int[] table = {
             0x0000,0x1021,0x2042,0x3063,0x4084,0x50a5,0x60c6,0x70e7,
@@ -43,11 +37,10 @@ public class CRC16_Redis {
             0x6e17,0x7e36,0x4e55,0x5e74,0x2e93,0x3eb2,0x0ed1,0x1ef0
     };
 
-    public static int hash(CharSequence charSequence) {
-        byte[] bytes = charSequence.toString().getBytes();
+    public static long hash(String data) {
         int crc = 0x0000;
-        for (byte b : bytes) {
-            crc = (crc >>> 8) ^ table[(crc ^ b) & 0xff];
+        for (int i = 0; i < data.length(); i++) {
+            crc = (crc >>> 8) ^ table[(crc ^ data.charAt(i)) & 0xff];
         }
         return crc;
     }
