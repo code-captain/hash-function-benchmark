@@ -2,7 +2,7 @@ package com.hashfunctions.murmur;
 
 public class Murmur2 extends MurmurConstants {
 
-    public static long hash(final byte[] data, int length, long seed) {
+    public static long hash_32(final byte[] data, int length, long seed) {
         final long m = 0x5bd1e995l;
         final int r = 24;
 
@@ -45,8 +45,7 @@ public class Murmur2 extends MurmurConstants {
         return hash;
     }
 
-    public static long hash(String data) {
-        final long seed = 0x9747b28c;
+    public static long hash_32(final String data, long seed) {
         final long m = 0x5bd1e995l;
         final int r = 24;
 

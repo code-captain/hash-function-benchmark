@@ -27,7 +27,7 @@ public class Murmur3 extends MurmurConstants {
      *
      * @return the computed hash value
      */
-    public static long hash_x86_32(final byte[] data, int length, long seed) {
+    public static long hash_32(final byte[] data, int length, long seed) {
         final int nblocks = length >> 2;
         long hash = seed;
 
@@ -83,10 +83,9 @@ public class Murmur3 extends MurmurConstants {
         return hash;
     }
 
-    public static long hash32(String data) {
+    public static long hash_32(String data, long seed) {
         int length = data.length();
         final int nblocks = length >> 2;
-        final long seed = 0x9747b28c;
         long hash = seed;
 
         //----------
@@ -155,7 +154,7 @@ public class Murmur3 extends MurmurConstants {
      *
      * @return the computed hash value
      */
-    public static long[] hash_x64_128(final byte[] data, final int length, final long seed) {
+    public static long[] hash_128(final byte[] data, final int length, final long seed) {
         long h1 = seed;
         long h2 = seed;
 
