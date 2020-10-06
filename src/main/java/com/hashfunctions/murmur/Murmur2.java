@@ -2,12 +2,12 @@ package com.hashfunctions.murmur;
 
 public class Murmur2 extends MurmurConstants {
 
-    public static int hash_32(final byte[] data, int length, int seed) {
-        final int m = 0x5bd1e995;
+    public static long hash_32(final byte[] data, int length, long seed) {
+        final long m = 0x5bd1e995L;
         final int r = 24;
 
         // Initialize the hash to a 'random' value
-        int hash = ((seed ^ length) & UINT_MASK);
+        long hash = ((seed ^ length) & UINT_MASK);
 
         // Mix 4 bytes at a time into the hash
         int length4 = length >>> 2;
@@ -15,7 +15,7 @@ public class Murmur2 extends MurmurConstants {
         for (int i = 0; i < length4; i++) {
             final int i4 = i << 2;
 
-            int k = (data[i4] & UNSIGNED_MASK);
+            long k = (data[i4] & UNSIGNED_MASK);
             k |= (data[i4 + 1] & UNSIGNED_MASK) << 8;
             k |= (data[i4 + 2] & UNSIGNED_MASK) << 16;
             k |= (data[i4 + 3] & UNSIGNED_MASK) << 24;
@@ -45,13 +45,13 @@ public class Murmur2 extends MurmurConstants {
         return hash;
     }
 
-    public static int hash_32(final String data, int seed) {
-        final int m = 0x5bd1e995;
+    public static long hash_32(final String data, long seed) {
+        final long m = 0x5bd1e995L;
         final int r = 24;
 
         // Initialize the hash to a 'random' value
         int length = data.length();
-        int hash = ((seed ^ length) & UINT_MASK);
+        long hash = ((seed ^ length) & UINT_MASK);
 
         // Mix 4 bytes at a time into the hash
         int length4 = length >>> 2;
@@ -59,7 +59,7 @@ public class Murmur2 extends MurmurConstants {
         for (int i = 0; i < length4; i++) {
             final int i4 = i << 2;
 
-            int k = (data.charAt(i4) & UNSIGNED_MASK);
+            long k = (data.charAt(i4) & UNSIGNED_MASK);
             k |= (data.charAt(i4 + 1) & UNSIGNED_MASK) << 8;
             k |= (data.charAt(i4 + 2) & UNSIGNED_MASK) << 16;
             k |= (data.charAt(i4 + 3) & UNSIGNED_MASK) << 24;

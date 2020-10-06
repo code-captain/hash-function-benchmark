@@ -3,7 +3,7 @@ package utils;
 import java.util.*;
 import java.util.concurrent.atomic.LongAdder;
 
-public final class UniformDistributionTestUtils {
+public class UniformDistributionTestUtilsLong {
 
     public static double getIntervalProbability(DistributionIntervalsStatistic statistic) {
         return statistic.intervalsLength / (getUniformDistributionRightBoundary(statistic) - getUniformDistributionLeftBoundary(statistic));
@@ -30,26 +30,26 @@ public final class UniformDistributionTestUtils {
         return Math.sqrt(sampleDispersion);
     }
 
-    public static DistributionIntervalsStatistic convertToDistributionIntervals(Collection<Integer> set) {
+    public static DistributionIntervalsStatistic convertToDistributionIntervals(Collection<Long> set) {
         int size = set.size();
-        Integer first = set.stream().min(Comparator.naturalOrder()).get();
-        Integer last = set.stream().max(Comparator.naturalOrder()).get();
-        int intervalsLength = getIntervalsLength(first, last , size);
+        Long first = set.stream().min(Comparator.naturalOrder()).get();
+        Long last = set.stream().max(Comparator.naturalOrder()).get();
+        long intervalsLength = getIntervalsLength(first, last , size);
         return convertToDistributionIntervals(set, intervalsLength);
     }
 
-    public static DistributionIntervalsStatistic convertToDistributionIntervals(Collection<Integer> set, int intervalsLength) {
-        Integer first = set.stream().min(Comparator.naturalOrder()).get();
+    public static DistributionIntervalsStatistic convertToDistributionIntervals(Collection<Long> set, long intervalsLength) {
+        Long first = set.stream().min(Comparator.naturalOrder()).get();
 
         NavigableSet<DistributionInterval> intervals = new TreeSet<>();
         DistributionInterval currInterval = null;
-        for (Integer value : set) {
+        for (Long value : set) {
             if (currInterval == null) {
                 intervals.add(currInterval = new DistributionInterval(first, intervalsLength));
             } else if (currInterval.rightBorder < value) {
                 intervals.add(currInterval = new DistributionInterval(currInterval.rightBorder + 1, intervalsLength));
             }
-            currInterval.incrementFreqeuncy();
+            currInterval.incrementFrequency();
         }
 
         return new DistributionIntervalsStatistic(intervals);
@@ -58,7 +58,7 @@ public final class UniformDistributionTestUtils {
     /*
         Get interval length for uniform partition
     */
-    static int getIntervalsLength(int min, int max, int count) {
+    static long getIntervalsLength(long min, long max, int count) {
         int intervalCount = getIntervalsCount(count);
         return (max - min) / intervalCount;
     }
@@ -83,16 +83,15 @@ public final class UniformDistributionTestUtils {
                     .mapToLong(DistributionInterval::getLength)
                     .findAny().getAsLong();
             this.freqeuncySum = intervals.stream()
-                    .mapToLong(interval -> interval.freqeuncy.longValue())
+                    .mapToLong(interval -> interval.frequency.longValue())
                     .sum();
             this.frequencyMiddleProductSum = intervals.stream()
-                    .mapToDouble(interval -> interval.freqeuncy.doubleValue() * interval.middleVal)
+                    .mapToDouble(interval -> interval.frequency.doubleValue() * interval.middleVal)
                     .sum();
             this.frequencyMiddlePowerTwoProductSum = intervals.stream()
-                    .mapToDouble(interval -> interval.freqeuncy.doubleValue() * Math.pow(interval.middleVal, 2))
+                    .mapToDouble(interval -> interval.frequency.doubleValue() * Math.pow(interval.middleVal, 2))
                     .sum();
-
-            this.intervals.forEach(interval -> interval.setRelativeFrequency(interval.freqeuncy.doubleValue() / this.freqeuncySum));
+            this.intervals.forEach(interval -> interval.setRelativeFrequency(interval.frequency.doubleValue() / this.freqeuncySum));
         }
 
         public NavigableSet<DistributionInterval> getIntervals() {
@@ -132,7 +131,7 @@ public final class UniformDistributionTestUtils {
         private final long leftBorder;
         private final long rightBorder;
         private final double middleVal;
-        private final LongAdder freqeuncy;
+        private final LongAdder frequency;
         private double relativeFrequency;
 
         public DistributionInterval(long leftBorder, long length) {
@@ -140,7 +139,7 @@ public final class UniformDistributionTestUtils {
             this.leftBorder = leftBorder;
             this.rightBorder = leftBorder + length;
             this.middleVal = ((double) leftBorder + rightBorder) / 2;
-            this.freqeuncy = new LongAdder();
+            this.frequency = new LongAdder();
         }
 
         public long getLeftBorder() {
@@ -155,16 +154,16 @@ public final class UniformDistributionTestUtils {
             return middleVal;
         }
 
-        public LongAdder getFreqeuncy() {
-            return freqeuncy;
+        public LongAdder getFrequency() {
+            return frequency;
         }
 
         public long getLength() {
             return length;
         }
 
-        void incrementFreqeuncy() {
-            freqeuncy.increment();
+        void incrementFrequency() {
+            frequency.increment();
         }
 
         @Override
@@ -175,12 +174,12 @@ public final class UniformDistributionTestUtils {
             return leftBorder == interval.leftBorder &&
                     rightBorder == interval.rightBorder &&
                     Double.compare(interval.middleVal, middleVal) == 0 &&
-                    Objects.equals(freqeuncy, interval.freqeuncy);
+                    Objects.equals(frequency, interval.frequency);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(leftBorder, rightBorder, middleVal, freqeuncy);
+            return Objects.hash(leftBorder, rightBorder, middleVal, frequency);
         }
 
         @Override
@@ -189,7 +188,7 @@ public final class UniformDistributionTestUtils {
                     "leftBorder=" + leftBorder +
                     ", rightBorder=" + rightBorder +
                     ", middleVal=" + middleVal +
-                    ", freqeuncy=" + freqeuncy +
+                    ", freqeuncy=" + frequency +
                     '}';
         }
 

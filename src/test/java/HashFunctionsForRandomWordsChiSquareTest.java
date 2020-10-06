@@ -21,7 +21,7 @@ import static java.util.Arrays.stream;
 
 public class HashFunctionsForRandomWordsChiSquareTest {
 
-    @ParameterizedTest
+/*    @ParameterizedTest
     @ValueSource(ints = { 16384, 8192, 4096, 2048, 1024 })
     public void djb2(int size) {
         List<Integer> values = getRandomValues(size, (Djb2::hash));
@@ -125,5 +125,5 @@ public class HashFunctionsForRandomWordsChiSquareTest {
 
     static boolean x2IsUniform(double[] data, double significance) {
         return x2Prob(data.length - 1.0, x2Dist(data)) > significance;
-    }
+    }*/
 }

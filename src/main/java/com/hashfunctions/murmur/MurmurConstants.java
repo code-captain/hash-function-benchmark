@@ -9,7 +9,7 @@ public class MurmurConstants {
     /**
      * Helps convert integer to its unsigned value
      */
-    public static final int UINT_MASK = 0xFFFFFFFF;
+    public static final long UINT_MASK = 0xFFFFFFFFL;
 
     /**
      * Helps convert long to its unsigned value
