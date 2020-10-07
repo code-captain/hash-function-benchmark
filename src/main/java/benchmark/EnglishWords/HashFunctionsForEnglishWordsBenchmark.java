@@ -11,8 +11,8 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @State(Scope.Thread)
-@Warmup(iterations = 2, time = 1)
-@Measurement(iterations = 2, time = 1)
+@Warmup(iterations = 1, time = 1)
+@Measurement(iterations = 1, time = 1)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 public class HashFunctionsForEnglishWordsBenchmark {
@@ -89,12 +89,12 @@ public class HashFunctionsForEnglishWordsBenchmark {
     @Benchmark
     public void murmur2(ExecutionPlan plan, Blackhole blackhole) {
         String testString = plan.testString;
-        blackhole.consume(Murmur2.hash_32(testString, new Random().nextInt()));
+        blackhole.consume(Murmur2.hash_32(testString,111111));
     }
 
     @Benchmark
     public void murmur3(ExecutionPlan plan, Blackhole blackhole) {
         String testString = plan.testString;
-        blackhole.consume(Murmur3.hash_32(testString, new Random().nextInt()));
+        blackhole.consume(Murmur3.hash_32(testString, 111111));
     }
 }

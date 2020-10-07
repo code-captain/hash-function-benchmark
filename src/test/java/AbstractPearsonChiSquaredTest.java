@@ -9,6 +9,8 @@ import utils.DistributionInterval;
 import utils.DistributionIntervalsStatistic;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -113,13 +115,14 @@ public abstract class AbstractPearsonChiSquaredTest {
     }
 
     protected void printRelativeFrequencyHistogram(DistributionIntervalsStatistic stat) {
+        DecimalFormat df = new DecimalFormat("#0.00000000000000", DecimalFormatSymbols.getInstance(Locale.US));
         stat.getIntervals().stream()
                 .collect(toMap(
                         DistributionInterval::getMiddleVal,
                         DistributionInterval::getRelativeFrequency,
                         (v1, v2) -> v1, TreeMap::new)
                 ).forEach((key, val) ->
-                System.out.println(String.format("%12f,%.12f", key, val))
+                System.out.println(String.format("%s,%s", df.format(key.floatValue()), df.format(val.floatValue())))
         );
     }
 

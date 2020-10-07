@@ -9,7 +9,7 @@ public class HashFunctionsForEnglishWordsBenchmarkRunner {
         Options opt = new OptionsBuilder()
                 .include(HashFunctionsForEnglishWordsBenchmark.class.getSimpleName())
                 //.jvmArgs("-Xms1G", "-Xmx8G")
-                .addProfiler("org.openjdk.jmh.profile.GCProfiler")
+                //.addProfiler("org.openjdk.jmh.profile.GCProfiler")
                 .build();
 
         new Runner(opt).run();

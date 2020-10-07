@@ -9,7 +9,7 @@ public class HashFunctionsForRandomWordsBenchmarkRunner {
         Options opt = new OptionsBuilder()
                 .include(HashFunctionsForRandomWordsBenchmark.class.getSimpleName())
                 //.jvmArgs("-Xms1G", "-Xmx8G")
-                .addProfiler("org.openjdk.jmh.profile.GCProfiler")
+                //.addProfiler("org.openjdk.jmh.profile.GCProfiler")
                 //.shouldDoGC(true)
                 .build();
 
