@@ -3,6 +3,7 @@ package benchmark.EnglishWords;
 import com.hashfunctions.*;
 import com.hashfunctions.murmur.Murmur2;
 import com.hashfunctions.murmur.Murmur3;
+import com.hashfunctions.murmur.MurmurConstants;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 
@@ -11,8 +12,8 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @State(Scope.Thread)
-@Warmup(iterations = 1, time = 1)
-@Measurement(iterations = 1, time = 1)
+@Warmup(iterations = 50, time = 1)
+@Measurement(iterations = 100, time = 1)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 public class HashFunctionsForEnglishWordsBenchmark {
@@ -89,12 +90,12 @@ public class HashFunctionsForEnglishWordsBenchmark {
     @Benchmark
     public void murmur2(ExecutionPlan plan, Blackhole blackhole) {
         String testString = plan.testString;
-        blackhole.consume(Murmur2.hash_32(testString,111111));
+        blackhole.consume(Murmur2.hash_32(testString, MurmurConstants.SEED));
     }
 
     @Benchmark
     public void murmur3(ExecutionPlan plan, Blackhole blackhole) {
         String testString = plan.testString;
-        blackhole.consume(Murmur3.hash_32(testString, 111111));
+        blackhole.consume(Murmur3.hash_32(testString, MurmurConstants.SEED));
     }
 }

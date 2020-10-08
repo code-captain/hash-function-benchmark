@@ -13,20 +13,7 @@ public class Murmur3 extends MurmurConstants {
 
     private static long X64_128_C2 = 0x4cf5ad432745937fL;
 
-    /**
-     * Compute the Murmur3 hash as described in the original source code.
-     *
-     * @param data
-     *            the data that needs to be hashed
-     *
-     * @param length
-     *            the length of the data that needs to be hashed
-     *
-     * @param seed
-     *            the seed to use to compute the hash
-     *
-     * @return the computed hash value
-     */
+
     public static long hash_32(final byte[] data, int length, long seed) {
         final int nblocks = length >> 2;
         long hash = seed;
@@ -140,20 +127,6 @@ public class Murmur3 extends MurmurConstants {
         return hash;
     }
 
-    /**
-     * Compute the Murmur3 hash (128-bit version) as described in the original source code.
-     *
-     * @param data
-     *            the data that needs to be hashed
-     *
-     * @param length
-     *            the length of the data that needs to be hashed
-     *
-     * @param seed
-     *            the seed to use to compute the hash
-     *
-     * @return the computed hash value
-     */
     public static long[] hash_128(final byte[] data, final int length, final long seed) {
         long h1 = seed;
         long h2 = seed;
